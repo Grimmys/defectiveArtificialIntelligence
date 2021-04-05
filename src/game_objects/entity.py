@@ -1,10 +1,9 @@
-import random
 from enum import Enum
 
 import pygame
 from pygame.sprite import Sprite
 
-from src.configuration import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, GAME_SURFACE_WIDTH, GAME_SURFACE_HEIGHT
+from src.configuration import GAME_SURFACE_WIDTH, GAME_SURFACE_HEIGHT
 from src.gui.tools import generate_random_position
 
 
