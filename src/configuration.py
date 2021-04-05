@@ -1,4 +1,4 @@
-GAME_NAME = "Defectuous Artificial Intelligence"
+GAME_NAME = "Defective Artificial Intelligence"
 
 MAIN_WINDOW_WIDTH = 1280
 MAIN_WINDOW_HEIGHT = 700

@@ -44,7 +44,7 @@ class ArtificialEngine:
                 print(standard_size)
                 size_insufficiently_different = False
         print("Original size :", original_engine.standard_size)
-        print("Defectuous size :", standard_size)
+        print("Defective size :", standard_size)
 
 
         theme_color = []
@@ -56,7 +56,7 @@ class ArtificialEngine:
                 defectuous_commposant = 255
             theme_color.append(defectuous_commposant)
         print("Original theme : ", original_engine.theme_color)
-        print("Defectuous theme : ", theme_color)
+        print("Defective theme : ", theme_color)
 
         movement_direction_preferences = original_engine.direction_preferences
         for direction in Entity.directions:
