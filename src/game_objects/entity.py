@@ -1,13 +1,12 @@
 from enum import Enum
 
 import pygame
-from pygame.sprite import Sprite
 
 from src.configuration import GAME_SURFACE_WIDTH, GAME_SURFACE_HEIGHT
 from src.gui.tools import generate_random_position
 
 
-class Entity(Sprite):
+class Entity(pygame.sprite.Sprite):
     directions = Enum('DIRECTIONS', 'UP DOWN LEFT RIGHT')
 
     def __init__(self, size, position=None):

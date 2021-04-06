@@ -2,7 +2,10 @@ import pygame
 
 fonts_descs = {
     'FPS_FONT': {'default': True, 'size': 20},
-    'HEADER_FONT': {'default': True, 'size': 30}
+    'HEADER_FONT': {'default': True, 'size': 30},
+    'TITLE_FONT': {'default': True, 'size': 50},
+    'BUTTON_FONT': {'default': True, 'size': 25},
+    'STANDARD_FONT': {'default': True, 'size': 22}
 }
 
 fonts = {}

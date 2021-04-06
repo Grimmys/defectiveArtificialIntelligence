@@ -1,5 +1,4 @@
 import random
-from enum import Enum
 
 from src.configuration import MIN_CELL_SIZE, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAX_CELL_SIZE
 from src.game_objects.action import Action
@@ -10,7 +9,9 @@ from src.gui.tools import generate_random_position, format_size
 class ArtificialEngine:
     @staticmethod
     def generate_artificial_engine():
-        standard_size = (random.randint(MIN_CELL_SIZE + 10, MAX_CELL_SIZE - 10), random.randint(MIN_CELL_SIZE + 10, MAX_CELL_SIZE - 10))
+        standard_size = (
+            random.randint(MIN_CELL_SIZE + 10, MAX_CELL_SIZE - 10),
+            random.randint(MIN_CELL_SIZE + 10, MAX_CELL_SIZE - 10))
 
         theme_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
@@ -36,20 +37,21 @@ class ArtificialEngine:
         size_insufficiently_different = True
         standard_size = original_engine.standard_size
         while size_insufficiently_different:
-            standard_size = format_size((random.randint(original_engine.standard_size[0] - 40, original_engine.standard_size[0] + 40),
-                             random.randint(original_engine.standard_size[1] - 40, original_engine.standard_size[1] + 40)),
-                            MIN_CELL_SIZE,
-                            MAX_CELL_SIZE)
-            if abs(standard_size[0] - original_engine.standard_size[0]) + abs(standard_size[1] - original_engine.standard_size[1]) > 30:
+            standard_size = format_size(
+                (random.randint(original_engine.standard_size[0] - 40, original_engine.standard_size[0] + 40),
+                 random.randint(original_engine.standard_size[1] - 40, original_engine.standard_size[1] + 40)),
+                MIN_CELL_SIZE,
+                MAX_CELL_SIZE)
+            if abs(standard_size[0] - original_engine.standard_size[0]) + abs(
+                    standard_size[1] - original_engine.standard_size[1]) > 30:
                 print(standard_size)
                 size_insufficiently_different = False
         print("Original size :", original_engine.standard_size)
         print("Defective size :", standard_size)
 
-
         theme_color = []
         for composant in original_engine.theme_color:
-            defectuous_commposant = composant + random.randint(30, 70) * (-1 if random.random() < 50 else 1)
+            defectuous_commposant = composant + random.randint(30, 70) * (-1 if random.random() < 0.5 else 1)
             if defectuous_commposant < 0:
                 defectuous_commposant = 0
             if defectuous_commposant > 255:
@@ -63,15 +65,15 @@ class ArtificialEngine:
             movement_direction_preferences.extend([direction] * random.randint(10, 50))
 
         action_decision_preferences = original_engine.action_preferences
-        action_decision_preferences.extend([Action.action_types.NOTHING] * random.randint(10, 1000) + \
-                                           [Action.action_types.MOVE] * random.randint(10, 1000) + \
+        action_decision_preferences.extend([Action.action_types.NOTHING] * random.randint(10, 1000) +
+                                           [Action.action_types.MOVE] * random.randint(10, 1000) +
                                            [Action.action_types.TELEPORT] * random.randint(1, 50))
         return standard_size, theme_color, movement_direction_preferences, action_decision_preferences
 
     def __init__(self, original_engine=None):
-        self.standard_size, self.theme_color, self.direction_preferences, self.action_preferences = \
-            ArtificialEngine.generate_defectuous_artificial_engine(original_engine) \
-                if original_engine else ArtificialEngine.generate_artificial_engine()
+        self.standard_size, self.theme_color, self.direction_preferences, self.action_preferences = (
+            ArtificialEngine.generate_defectuous_artificial_engine(original_engine)
+                if original_engine else ArtificialEngine.generate_artificial_engine())
 
     def compute_size(self):
         size = random.randint(self.standard_size[0] - 10, self.standard_size[0] + 10), \
@@ -101,4 +103,3 @@ class ArtificialEngine:
 
     def compute_action_decision(self):
         return random.choice(self.action_preferences)
-
