@@ -19,8 +19,8 @@ class MainMenu(Scene):
 
     def init_buttons(self):
         self.buttons.add(
-            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 300), "START", self.start_game),
-            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 450), "HELP", self.help),
+            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 200), "START", self.start_game),
+            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 400), "HELP", self.help),
             Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 600), "EXIT", self.exit_game)
         )
 

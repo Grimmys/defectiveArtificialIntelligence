@@ -1,7 +1,7 @@
 import pygame
 
-BUTTON_WIDTH = 300
-BUTTON_HEIGHT = 50
+BUTTON_WIDTH = 350
+BUTTON_HEIGHT = 100
 
 class Scene:
     def __init__(self, width, height, game_controller):

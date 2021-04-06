@@ -21,33 +21,33 @@ class Help(Scene):
 
     def init_text(self):
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 200), "April 2035")
+            Text((self.surface.get_width(), 50), (0, 150), "April 2035")
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 300), "The biggest international research center in artificial intelligence")
+            Text((self.surface.get_width(), 50), (0, 250), "The biggest international research center in artificial intelligence")
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 350), "succeeded in the creation of an intelligence able to generate artificial cells following the same model.")
+            Text((self.surface.get_width(), 50), (0, 300), "succeeded in the creation of an intelligence able to generate artificial cells following the same model.")
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 450), "But there are rumors about a hacker gang that is trying to inject a malicious artificial cell among the originals.")
+            Text((self.surface.get_width(), 50), (0, 400), "But there are rumors about a hacker gang that is trying to inject a malicious artificial cell among the originals.")
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 500), "You have been preselected to take a few tests that will evaluate your skill at spotting intruders in simulated situations.")
+            Text((self.surface.get_width(), 50), (0, 450), "You have been preselected to take a few tests that will evaluate your skill at spotting intruders in simulated situations.")
 
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 600), "Will you be observant enough to find the intruder?")
+            Text((self.surface.get_width(), 50), (0, 550), "Will you be observant enough to find the intruder?")
         )
 
     def init_buttons(self):
         self.buttons.add(
-            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 700), "BACK TO MAIN MENU", self.back_to_main_menu),
+            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 650), "BACK TO MAIN MENU", self.back_to_main_menu),
         )
 
     def draw(self):

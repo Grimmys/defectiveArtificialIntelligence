@@ -18,16 +18,17 @@ class MainScene(Scene):
 
     def __init__(self, width, height, game_controller):
         super().__init__(width, height, game_controller)
-
-        self.header = pygame.Surface((MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT - GAME_SURFACE_HEIGHT))
-        self.header_title = None
-        self.header_tries = None
-
+        self.level = 1
         self.victory = False
         self.tries = 0
         self.timer = 0
         self.current_elapsed_time = 0
         self.counter_before_text_disapear = -1
+
+        self.header = pygame.Surface((MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT - GAME_SURFACE_HEIGHT))
+        self.header_title = None
+        self.header_tries = None
+        self.header_level = None
 
         self.game_space = pygame.Surface((GAME_SURFACE_WIDTH, GAME_SURFACE_HEIGHT))
         self.background = self.build_background()
@@ -44,12 +45,16 @@ class MainScene(Scene):
                 surface.blit(floor, (x, y))
         return surface
 
+    def update_level_display(self):
+        self.header_level = fonts.fonts["HEADER_FONT"].render(f"LVL.{self.level}", False, (255, 255, 255))
+
     def update_tries_display(self):
         self.header_tries = fonts.fonts["HEADER_FONT"].render(f"Tries: {self.tries}", False, (255, 255, 255))
 
     def init_header(self):
         self.header_title = fonts.fonts["HEADER_FONT"].render("Which one is the intruder...", False, (255, 255, 255))
         self.update_tries_display()
+        self.update_level_display()
 
     def init_game(self):
         self.victory = False
@@ -65,7 +70,7 @@ class MainScene(Scene):
         self.artificial_cells.empty()
         self.entities.empty()
         number_cells = random.randint(MIN_CELLS, MAX_CELLS)
-        common_artificial_engine = ArtificialEngine()
+        common_artificial_engine = ArtificialEngine(self.level)
         for i in range(number_cells):
             while True:
                 robot = ArtificialCell(common_artificial_engine)
@@ -76,7 +81,7 @@ class MainScene(Scene):
             self.entities.add(robot)
         # Generated the intruder trying to copy others
         while True:
-            intruder = ArtificialCell(ArtificialEngine(common_artificial_engine), is_the_intruder=True)
+            intruder = ArtificialCell(ArtificialEngine(self.level, common_artificial_engine), is_the_intruder=True)
             if pygame.sprite.spritecollideany(intruder, self.entities) is None:
                 break
         self.artificial_cells.add(intruder)
@@ -95,6 +100,10 @@ class MainScene(Scene):
 
         # -> Last game message if any
         self.header.blit(self.header_title, (self.header.get_width() // 2 - self.header_title.get_width() // 2,
+                                             self.header.get_height() // 2 - self.header_title.get_height() // 2))
+
+        # -> Level
+        self.header.blit(self.header_level, (4 * self.header.get_width() // 5 - self.header_level.get_width() // 2,
                                              self.header.get_height() // 2 - self.header_title.get_height() // 2))
 
         # -> Tries
@@ -131,17 +140,16 @@ class MainScene(Scene):
 
     def mouse_button_down(self, button, pos):
         super().mouse_button_down(button, pos)
-        if button == 1:
+        if button == 1 and not self.victory:
             # Position should be relative to game space, so we decrement the position by the height of the header
             pos = (pos[0], pos[1] - self.header.get_height())
-            print("Clicked pos :", pos)
             for cell in self.artificial_cells:
-                print("Robot pos :", cell.rect)
                 if cell.rect.collidepoint(pos):
                     self.tries += 1
                     self.update_tries_display()
                     self.counter_before_text_disapear = 120
                     if cell.is_intruder:
+                        self.level += 1
                         self.victory = True
                         self.header_title = fonts.fonts["HEADER_FONT"].render("You found it !", False, pygame.Color("green"))
                     else:
