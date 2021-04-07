@@ -22,6 +22,7 @@ class Entity(pygame.sprite.Sprite):
                                                                  GAME_SURFACE_HEIGHT - self.rect.height))
 
         self.current_action = None
+        self.original_image = self.image
 
     def position_is_valid(self, other_entities, bounds):
         return len(pygame.sprite.spritecollide(self, other_entities, False)) == 1 \

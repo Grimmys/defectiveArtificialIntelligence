@@ -40,7 +40,7 @@ class GameController:
             self.window.blit(self.active_scene.surface, (0, 0))
             show_fps(self.window, self.clock, fonts.fonts["FPS_FONT"])
             pygame.display.update()
-            self.clock.tick(60)
+            self.clock.tick(120)
         raise SystemExit
 
     def switch_scene(self, scene):

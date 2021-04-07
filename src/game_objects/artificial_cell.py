@@ -1,7 +1,7 @@
 
 import pygame
 
-from src.configuration import TWEAKING_MODE, MOVEMENT_FRAMES, STAY_FRAMES, TELEPORT_FRAMES
+from src.configuration import TWEAKING_MODE, MOVEMENT_STEPS
 from src.game_objects.action import Action
 from src.game_objects.entity import Entity
 
@@ -27,6 +27,8 @@ class ArtificialCell(Entity):
 
         self.teleport_cross_position = None
 
+        self.velocity = artificial_engine.velocity
+
         if TWEAKING_MODE and self.is_intruder:
             indicator = pygame.Surface((self.rect.width // 5, self.rect.height // 5))
             indicator.fill(pygame.Color("white"))
@@ -37,7 +39,7 @@ class ArtificialCell(Entity):
         direction = self.artificial_engine.compute_movement_direction()
         self.move(direction)
         if self.position_is_valid(other_entities, bounds):
-            self.current_action = Action(Action.action_types.MOVE, MOVEMENT_FRAMES, move_direction=direction)
+            self.current_action = Action(Action.action_types.MOVE, self.velocity, move_direction=direction)
             return
         self.rect = initial_rect.copy()
 
@@ -50,7 +52,7 @@ class ArtificialCell(Entity):
             teleport_entity = Entity(self.rect.size, endpoint)
             other_entities.add(teleport_entity)
             if teleport_entity.position_is_valid(other_entities, bounds):
-                self.current_action = Action(Action.action_types.TELEPORT, TELEPORT_FRAMES, endpoint=endpoint)
+                self.current_action = Action(Action.action_types.TELEPORT, self.velocity, endpoint=teleport_entity)
                 break
             other_entities.remove(teleport_entity)
             self.rect = initial_rect.copy()
@@ -63,29 +65,35 @@ class ArtificialCell(Entity):
         elif action is Action.action_types.TELEPORT:
             self.start_teleport(other_entities, bounds)
         elif action is Action.action_types.NOTHING:
-            self.current_action = Action(action, STAY_FRAMES)
+            self.current_action = Action(action, self.velocity)
 
     def continue_current_action(self, other_entities, bounds):
         if self.current_action.nature is Action.action_types.MOVE:
             if self.current_action.progress():
                 self.current_action = None
                 return
-            initial_rect = self.rect.copy()
-            self.move(self.current_action.move_direction)
-            if not self.position_is_valid(other_entities, bounds):
-                self.rect = initial_rect
-                self.current_action = None
+            if self.current_action.current_frame >= (self.current_action.movement_progression + 1) * self.current_action.nb_frames / MOVEMENT_STEPS:
+                self.current_action.movement_progression += 1
+                initial_rect = self.rect.copy()
+                self.move(self.current_action.move_direction)
+                if not self.position_is_valid(other_entities, bounds):
+                    self.rect = initial_rect
+                    self.current_action = None
         elif self.current_action.nature is Action.action_types.TELEPORT:
             if self.current_action.progress():
                 self.current_action = None
                 return
             if self.current_action.current_frame == 1:
                 self.teleport_cross_position = self.rect.x, self.rect.y
+            elif self.current_action.current_frame == self.current_action.nb_frames // 4:
+                self.image = pygame.Surface((0, 0))
             elif self.current_action.current_frame == self.current_action.nb_frames // 2:
-                self.teleport_cross_position = self.current_action.endpoint
+                self.teleport_cross_position = self.current_action.endpoint.rect
             elif self.current_action.current_frame == self.current_action.nb_frames - 1:
+                self.image = self.original_image
                 self.teleport_cross_position = None
-                self.rect.x, self.rect.y = self.current_action.endpoint
+                other_entities.remove(self.current_action.endpoint)
+                self.rect.x, self.rect.y = self.current_action.endpoint.rect.x, self.current_action.endpoint.rect.y
         elif self.current_action.nature is Action.action_types.NOTHING:
             if self.current_action.progress():
                 self.current_action = None

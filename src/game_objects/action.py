@@ -8,6 +8,7 @@ class Action:
         self.nature = nature
         self.nb_frames = nb_frames
         self.move_direction = move_direction
+        self.movement_progression = 0
         self.endpoint = endpoint
         self.current_frame = 0
 

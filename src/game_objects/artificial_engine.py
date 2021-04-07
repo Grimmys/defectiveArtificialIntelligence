@@ -1,7 +1,8 @@
 import random
 import statistics
 
-from src.configuration import MIN_CELL_SIZE, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAX_CELL_SIZE
+from src.configuration import MIN_CELL_SIZE, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAX_CELL_SIZE, MAX_ACTION_FRAMES, \
+    MIN_ACTION_FRAMES
 from src.game_objects.action import Action
 from src.game_objects.entity import Entity
 from src.gui.tools import generate_random_position, format_size
@@ -21,6 +22,9 @@ class ArtificialEngine:
         # Generate median color
         theme_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
+        # Generate reactivity of the cell (i.e. determines if the execution of an action will be slow or fast)
+        velocity = random.randint(MIN_ACTION_FRAMES, MAX_ACTION_FRAMES)
+
         # Generate movement direction preferences
         movement_direction_preferences = []
         proportion_left = 100
@@ -35,9 +39,9 @@ class ArtificialEngine:
         # Generate action preferences
         action_decision_preferences = [(Action.action_types.NOTHING, random.randint(50, 5000)),
                                        (Action.action_types.MOVE, random.randint(50, 5000)),
-                                       (Action.action_types.TELEPORT, random.randint(20, 200))]
+                                       (Action.action_types.TELEPORT, random.randint(20, 2000))]
         print("Action decision preferences: ", action_decision_preferences)
-        return black_points_proportion, standard_size, theme_color, movement_direction_preferences, action_decision_preferences
+        return black_points_proportion, standard_size, theme_color, velocity, movement_direction_preferences, action_decision_preferences
 
     @staticmethod
     def generate_defectuous_artificial_engine(original_engine, difficulty_level):
@@ -63,16 +67,24 @@ class ArtificialEngine:
             theme_color = []
             total_difference = 0
             for composant in original_engine.theme_color:
-                difference = random.randint(10, 70) * (-1 if random.random() < 0.5 else 1)
+                difference = random.randint(5, 60) * (-1 if random.random() < 0.5 else 1)
                 defectuous_commposant = composant + difference
                 if defectuous_commposant < 0:
                     defectuous_commposant = 0
                 if defectuous_commposant > 255:
                     defectuous_commposant = 255
                 theme_color.append(defectuous_commposant)
-                total_difference += difference
+                total_difference += abs(difference)
             if 60 / difficulty_level < total_difference < 120 / difficulty_level:
+                print("Total difference :", total_difference)
                 break
+        print("Old color theme :", original_engine.theme_color)
+        print("New color theme :", theme_color)
+
+        # Generate slightly different velocity from the original one
+        deviation = random.uniform(0.5, 0.9)
+        deviation = deviation if random.random() < 0.5 else 1 / deviation
+        velocity = int(original_engine.velocity * deviation)
 
         # Generate direction preferences slightly differents from the original ones
         movement_direction_preferences = original_engine.direction_preferences
@@ -91,11 +103,11 @@ class ArtificialEngine:
                 break
         print("Defectuous decision preferences: ", action_decision_preferences)
 
-        return black_points_proportion, standard_size, theme_color, movement_direction_preferences, action_decision_preferences
+        return black_points_proportion, standard_size, theme_color, velocity, movement_direction_preferences, action_decision_preferences
 
     def __init__(self, level, original_engine=None):
         difficulty_level = 0.8 + level / 5
-        self.black_points_proportion, self.standard_size, self.theme_color, self.direction_preferences, self.action_preferences = (
+        self.black_points_proportion, self.standard_size, self.theme_color, self.velocity, self.direction_preferences, self.action_preferences = (
             ArtificialEngine.generate_defectuous_artificial_engine(original_engine, difficulty_level)
             if original_engine else ArtificialEngine.generate_artificial_engine())
 
@@ -117,7 +129,7 @@ class ArtificialEngine:
     def compute_color(self):
         generated_color = []
         for original_composant in self.theme_color:
-            generated_composant = random.randint(original_composant - 30, original_composant + 30)
+            generated_composant = random.randint(original_composant - 20, original_composant + 20)
             if generated_composant < 0:
                 generated_composant = 0
             if generated_composant > 255:
