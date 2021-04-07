@@ -4,7 +4,7 @@ from src.configuration import GAME_NAME, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT
 from src.gui import fonts
 from src.gui.button import Button
 from src.scenes.help import Help
-from src.scenes.main_scene import MainScene
+from src.scenes.game import Game
 from src.scenes.scene import Scene, BUTTON_WIDTH, BUTTON_HEIGHT
 
 
@@ -34,7 +34,7 @@ class MainMenu(Scene):
         self.buttons.draw(self.surface)
 
     def start_game(self):
-        game_scene = MainScene(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, self.controller)
+        game_scene = Game(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, self.controller)
         self.controller.switch_scene(game_scene)
 
     def help(self):

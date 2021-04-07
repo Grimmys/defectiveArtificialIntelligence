@@ -14,7 +14,7 @@ from src.scenes.scene import Scene
 COLORS = (pygame.Color('red'), pygame.Color('blue'), pygame.Color('green'))
 
 
-class MainScene(Scene):
+class Game(Scene):
 
     def __init__(self, width, height, game_controller):
         super().__init__(width, height, game_controller)

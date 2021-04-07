@@ -1,7 +1,7 @@
 import pygame
 
 from src.gui import fonts
-from src.services.game_controller import GameController
+from src.game_controller import GameController
 
 if __name__ == "__main__":
     pygame.init()
