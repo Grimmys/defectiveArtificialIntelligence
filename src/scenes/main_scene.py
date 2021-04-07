@@ -153,6 +153,6 @@ class MainScene(Scene):
                         self.victory = True
                         self.header_title = fonts.fonts["HEADER_FONT"].render("You found it !", False, pygame.Color("green"))
                     else:
-                        self.header_title = fonts.fonts["HEADER_FONT"].render("No... It's not the intruder, try again.",
+                        self.header_title = fonts.fonts["HEADER_FONT"].render("No... It's not the intruder. Try again.",
                                                                               False, pygame.Color("red"))
                     break

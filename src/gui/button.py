@@ -10,10 +10,10 @@ class Button(pygame.sprite.Sprite):
         super().__init__()
 
         self.standard_image = Surface((size[0], size[1]))
-        self.standard_image.fill(pygame.Color("green"))
+        self.standard_image.blit(pygame.transform.scale(pygame.image.load("imgs/metallic_button.png"), (size)), (0, 0))
 
         self.mouse_over_image = Surface((size[0], size[1]))
-        self.mouse_over_image.fill(pygame.Color("darkgreen"))
+        self.mouse_over_image.blit(pygame.transform.scale(pygame.image.load("imgs/metallic_button_hover.png"), (size)), (0, 0))
 
         self.image = self.standard_image
 

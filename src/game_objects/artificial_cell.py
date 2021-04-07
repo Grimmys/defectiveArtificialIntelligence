@@ -7,7 +7,7 @@ from src.game_objects.entity import Entity
 
 
 class ArtificialCell(Entity):
-    CELL_IMAGE = pygame.image.load("imgs/round_cell.png")
+    CELL_IMAGE = pygame.image.load("imgs/pure_cell.png")
 
     def __init__(self, artificial_engine, is_the_intruder=False):
         super().__init__(artificial_engine.compute_size())
@@ -15,7 +15,8 @@ class ArtificialCell(Entity):
         self.artificial_engine = artificial_engine
         self.is_intruder = is_the_intruder
 
-        cell_resized = pygame.transform.scale(ArtificialCell.CELL_IMAGE, self.rect.size)
+        cell_with_personal_pattern = self.artificial_engine.compute_pattern(ArtificialCell.CELL_IMAGE)
+        cell_resized = pygame.transform.scale(cell_with_personal_pattern, self.rect.size)
         self.image.blit(cell_resized, (0, 0))
         color_filter = pygame.Surface(self.rect.size).convert_alpha()
         color_filter.fill(self.artificial_engine.compute_color())

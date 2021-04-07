@@ -2,10 +2,10 @@ import pygame
 
 fonts_descs = {
     'FPS_FONT': {'default': True, 'size': 20},
-    'HEADER_FONT': {'default': True, 'size': 30},
-    'TITLE_FONT': {'default': True, 'size': 50},
-    'BUTTON_FONT': {'default': True, 'size': 30},
-    'STANDARD_FONT': {'default': True, 'size': 22}
+    'HEADER_FONT': {'name': 'fonts/GALS.ttf', 'size': 30},
+    'TITLE_FONT': {'name': 'fonts/neuropol_x_rg.ttf', 'size': 50},
+    'BUTTON_FONT': {'name': 'fonts/anita_semi_square.ttf', 'size': 26},
+    'STANDARD_FONT': {'name': 'fonts/anita_semi_square.ttf', 'size': 20}
 }
 
 fonts = {}

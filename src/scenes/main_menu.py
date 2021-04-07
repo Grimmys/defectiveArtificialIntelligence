@@ -28,7 +28,7 @@ class MainMenu(Scene):
         super().draw()
 
         # Print game title
-        self.surface.blit(self.title, (self.surface.get_width() // 2 - self.title.get_width() // 2, 50))
+        self.surface.blit(self.title, (self.surface.get_width() // 2 - self.title.get_width() // 2, 30))
 
         # Display buttons
         self.buttons.draw(self.surface)

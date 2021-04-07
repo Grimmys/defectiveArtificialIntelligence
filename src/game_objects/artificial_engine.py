@@ -10,6 +10,9 @@ from src.gui.tools import generate_random_position, format_size
 class ArtificialEngine:
     @staticmethod
     def generate_artificial_engine():
+        # Generate proportion of black points on the surface of the cell
+        black_points_proportion = random.uniform(0.1, 0.4)
+
         # Generate median size
         standard_size = (
             random.randint(MIN_CELL_SIZE + 10, MAX_CELL_SIZE - 10),
@@ -34,10 +37,16 @@ class ArtificialEngine:
                                        (Action.action_types.MOVE, random.randint(50, 5000)),
                                        (Action.action_types.TELEPORT, random.randint(20, 200))]
         print("Action decision preferences: ", action_decision_preferences)
-        return standard_size, theme_color, movement_direction_preferences, action_decision_preferences
+        return black_points_proportion, standard_size, theme_color, movement_direction_preferences, action_decision_preferences
 
     @staticmethod
     def generate_defectuous_artificial_engine(original_engine, difficulty_level):
+        # Generate slightly derivate proportion of black points from the original one
+        deviation = 1 + (random.uniform(0.7, 0.8) - 1) / difficulty_level
+        deviation = deviation if random.random() < 0.5 else 1 / deviation
+        black_points_proportion = original_engine.black_points_proportion * deviation
+
+
         # Generate standard size slightly different from the original one
         while True:
             standard_size = format_size(
@@ -82,13 +91,22 @@ class ArtificialEngine:
                 break
         print("Defectuous decision preferences: ", action_decision_preferences)
 
-        return standard_size, theme_color, movement_direction_preferences, action_decision_preferences
+        return black_points_proportion, standard_size, theme_color, movement_direction_preferences, action_decision_preferences
 
     def __init__(self, level, original_engine=None):
         difficulty_level = 0.8 + level / 5
-        self.standard_size, self.theme_color, self.direction_preferences, self.action_preferences = (
+        self.black_points_proportion, self.standard_size, self.theme_color, self.direction_preferences, self.action_preferences = (
             ArtificialEngine.generate_defectuous_artificial_engine(original_engine, difficulty_level)
             if original_engine else ArtificialEngine.generate_artificial_engine())
+
+    def compute_pattern(self, image):
+        image_with_pattern = image.copy()
+        for x in range(0, image_with_pattern.get_width()):
+            for y in range(0, image_with_pattern.get_height()):
+                if image_with_pattern.get_at((x, y)) == (255, 255, 255) and random.random() < self.black_points_proportion:
+                    image_with_pattern.set_at((x, y), (0, 0, 0))
+
+        return image_with_pattern
 
     def compute_size(self):
         size = random.randint(self.standard_size[0] - 10, self.standard_size[0] + 10), \

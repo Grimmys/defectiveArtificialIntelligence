@@ -33,28 +33,35 @@ class Help(Scene):
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 400), "But there are rumors about a hacker gang that is trying to inject a malicious artificial cell among the originals.")
+            Text((self.surface.get_width(), 50), (0, 400), "But there are rumors about a hacker gang that is trying ")
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 450), "You have been preselected to take a few tests that will evaluate your skill at spotting intruders in simulated situations.")
-
+            Text((self.surface.get_width(), 50), (0, 450), "to inject a malicious artificial cell among the originals.")
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 550), "Will you be observant enough to find the intruder?")
+            Text((self.surface.get_width(), 50), (0, 500), "You have been preselected to take a few tests that will ")
+        )
+
+        self.text_lines.add(
+            Text((self.surface.get_width(), 50), (0, 550), "evaluate your skill at spotting intruders in simulated situations.")
+        )
+
+        self.text_lines.add(
+            Text((self.surface.get_width(), 50), (0, 650), "Will you be observant enough to find the intruder?")
         )
 
     def init_buttons(self):
         self.buttons.add(
-            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 650), "BACK TO MAIN MENU", self.back_to_main_menu),
+            Button((BUTTON_WIDTH, BUTTON_HEIGHT), (self.surface.get_width() // 2 - BUTTON_WIDTH // 2, 720), "BACK TO MAIN MENU", self.back_to_main_menu),
         )
 
     def draw(self):
         super().draw()
 
         # Print game title
-        self.surface.blit(self.title, (self.surface.get_width() // 2 - self.title.get_width() // 2, 50))
+        self.surface.blit(self.title, (self.surface.get_width() // 2 - self.title.get_width() // 2, 30))
 
         # Print help text
         self.text_lines.draw(self.surface)
