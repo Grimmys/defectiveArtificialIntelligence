@@ -10,6 +10,22 @@ from src.gui.tools import generate_random_position, format_size
 
 class ArtificialEngine:
     @staticmethod
+    def mutate_preferences(preferences):
+        """This method takes a list of elements having each a specific weight (priority)
+           and randomly changes these weights"""
+        mutated_preferences = []
+        deviations = []
+        for preference in preferences:
+            deviation = random.uniform(1, 8)
+            deviations.append(deviation)
+            mutated_preferences.append((preference[0], int(preference[1] * deviation)))
+        if statistics.stdev(deviations) > 3:
+            return mutated_preferences
+        else:
+            return ArtificialEngine.mutate_preferences(preferences)
+
+
+    @staticmethod
     def generate_artificial_engine():
         # Generate proportion of black points on the surface of the cell
         black_points_proportion = random.uniform(0.1, 0.4)
@@ -27,14 +43,9 @@ class ArtificialEngine:
 
         # Generate movement direction preferences
         movement_direction_preferences = []
-        proportion_left = 100
         for direction in Entity.directions:
-            priority = random.randint(5, proportion_left // 2)
-            movement_direction_preferences.extend([direction] * priority)
-            proportion_left -= priority
-        proportion_left //= 4
-        for direction in Entity.directions:
-            movement_direction_preferences.extend([direction] * proportion_left)
+            movement_direction_preferences.append((direction, random.randint(10, 100)))
+        print("Movement direction preferences :", movement_direction_preferences)
 
         # Generate action preferences
         action_decision_preferences = [(Action.action_types.NOTHING, random.randint(50, 5000)),
@@ -49,7 +60,6 @@ class ArtificialEngine:
         deviation = 1 + (random.uniform(0.7, 0.8) - 1) / difficulty_level
         deviation = deviation if random.random() < 0.5 else 1 / deviation
         black_points_proportion = original_engine.black_points_proportion * deviation
-
 
         # Generate standard size slightly different from the original one
         while True:
@@ -76,7 +86,6 @@ class ArtificialEngine:
                 theme_color.append(defectuous_commposant)
                 total_difference += abs(difference)
             if 60 / difficulty_level < total_difference < 120 / difficulty_level:
-                print("Total difference :", total_difference)
                 break
         print("Old color theme :", original_engine.theme_color)
         print("New color theme :", theme_color)
@@ -87,20 +96,10 @@ class ArtificialEngine:
         velocity = int(original_engine.velocity * deviation)
 
         # Generate direction preferences slightly differents from the original ones
-        movement_direction_preferences = original_engine.direction_preferences
-        for direction in Entity.directions:
-            movement_direction_preferences.extend([direction] * random.randint(10, 50))
+        movement_direction_preferences = ArtificialEngine.mutate_preferences(original_engine.direction_preferences)
 
         # Mutate action preferences until the deviation from the original ones is enough
-        while True:
-            action_decision_preferences = []
-            deviations = []
-            for action_preference in original_engine.action_preferences:
-                deviation = random.uniform(1, 8)
-                deviations.append(deviation)
-                action_decision_preferences.append((action_preference[0], int(action_preference[1] * deviation)))
-            if statistics.stdev(deviations) > 3:
-                break
+        action_decision_preferences = ArtificialEngine.mutate_preferences(original_engine.action_preferences)
         print("Defectuous decision preferences: ", action_decision_preferences)
 
         return black_points_proportion, standard_size, theme_color, velocity, movement_direction_preferences, action_decision_preferences
@@ -138,8 +137,12 @@ class ArtificialEngine:
         return generated_color
 
     def compute_movement_direction(self):
-        # For now, direction_priority is following the format " [DIRECTION, DIRECTION, DIRECTION, OTHER_DIRECTION] "
-        return random.choice(self.direction_preferences)
+        total_direction_weights = sum(map(lambda direction_pref: direction_pref[1], self.direction_preferences))
+        random_pick = random.randint(0, total_direction_weights)
+        for direction_preference in self.direction_preferences:
+            random_pick -= direction_preference[1]
+            if random_pick <= 0:
+                return direction_preference[0]
 
     def compute_teleport_endpoint(self, entity_rect):
         endpoint = generate_random_position((MAIN_WINDOW_WIDTH - entity_rect.width,
