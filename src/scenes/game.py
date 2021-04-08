@@ -132,7 +132,8 @@ class Game(Scene):
                 else:
                     self.init_header()
 
-        self.current_elapsed_time = (time.get_ticks() - self.timer) // 1000
+        if not self.victory and not self.defeat:
+            self.current_elapsed_time = (time.get_ticks() - self.timer) // 1000
 
         for entity in self.entities:
             entity.update(self.entities, self.game_space.get_size())

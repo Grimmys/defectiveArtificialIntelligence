@@ -67,6 +67,7 @@ class ArtificialEngine:
     def generate_defectuous_artificial_engine(original_engine, difficulty_level):
         # Generate slightly derivate proportion of black points from the original one
         deviation = 1 + (random.uniform(0.7, 0.8) - 1) / difficulty_level
+        # Deviation coefficient could be decrease or increase
         deviation = deviation if random.random() < 0.5 else 1 / deviation
         black_points_proportion = original_engine.black_points_proportion * deviation
 
@@ -86,22 +87,21 @@ class ArtificialEngine:
         while True:
             theme_color = []
             total_difference = 0
-            for composant in original_engine.theme_color:
+            for component in original_engine.theme_color:
                 difference = random.randint(5, 60) * (-1 if random.random() < 0.5 else 1)
-                defectuous_commposant = composant + difference
-                if defectuous_commposant < 0:
-                    defectuous_commposant = 0
-                if defectuous_commposant > 255:
-                    defectuous_commposant = 255
-                theme_color.append(defectuous_commposant)
+                defective_component = component + difference
+                if defective_component < 0:
+                    defective_component = 0
+                if defective_component > 255:
+                    defective_component = 255
+                theme_color.append(defective_component)
                 total_difference += abs(difference)
             if 60 / difficulty_level < total_difference < 120 / difficulty_level:
                 break
-        print("Old color theme :", original_engine.theme_color)
-        print("New color theme :", theme_color)
 
         # Generate slightly different velocity from the original one
         deviation = random.uniform(0.5, 0.9)
+        # Deviation coefficient could be decrease or increase
         deviation = deviation if random.random() < 0.5 else 1 / deviation
         velocity = int(original_engine.velocity * deviation)
 
@@ -116,7 +116,8 @@ class ArtificialEngine:
 
     def __init__(self, level, original_engine=None):
         difficulty_level = 0.8 + level / 5
-        self.black_points_proportion, self.standard_size, self.theme_color, self.velocity, self.direction_preferences, self.action_preferences = (
+        self.black_points_proportion, self.standard_size, self.theme_color, \
+        self.velocity, self.direction_preferences, self.action_preferences = (
             ArtificialEngine.generate_defectuous_artificial_engine(original_engine, difficulty_level)
             if original_engine else ArtificialEngine.generate_artificial_engine())
 
@@ -138,13 +139,13 @@ class ArtificialEngine:
 
     def compute_color(self):
         generated_color = []
-        for original_composant in self.theme_color:
-            generated_composant = random.randint(original_composant - 20, original_composant + 20)
-            if generated_composant < 0:
-                generated_composant = 0
-            if generated_composant > 255:
-                generated_composant = 255
-            generated_color.append(generated_composant)
+        for original_component in self.theme_color:
+            generated_component = random.randint(original_component - 20, original_component + 20)
+            if generated_component < 0:
+                generated_component = 0
+            if generated_component > 255:
+                generated_component = 255
+            generated_color.append(generated_component)
         return generated_color
 
     def compute_movement_direction(self):
