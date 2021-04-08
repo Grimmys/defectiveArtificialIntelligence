@@ -8,22 +8,31 @@ from src.game_objects.entity import Entity
 from src.gui.tools import generate_random_position, format_size
 
 
-class ArtificialEngine:
-    @staticmethod
-    def mutate_preferences(preferences):
-        """This method takes a list of elements having each a specific weight (priority)
-           and randomly changes these weights"""
-        mutated_preferences = []
-        deviations = []
-        for preference in preferences:
-            deviation = random.uniform(1, 8)
-            deviations.append(deviation)
-            mutated_preferences.append((preference[0], int(preference[1] * deviation)))
-        if statistics.stdev(deviations) > 3:
-            return mutated_preferences
-        else:
-            return ArtificialEngine.mutate_preferences(preferences)
+def mutate_preferences(preferences):
+    """This method takes a list of elements having each a specific weight (priority)
+       and randomly changes these weights"""
+    mutated_preferences = []
+    deviations = []
+    for preference in preferences:
+        deviation = random.uniform(1, 8)
+        deviations.append(deviation)
+        mutated_preferences.append((preference[0], int(preference[1] * deviation)))
+    if statistics.stdev(deviations) > 3:
+        return mutated_preferences
+    else:
+        return mutate_preferences(preferences)
 
+
+def pick_random_preference(preferences):
+    total_weights = sum(map(lambda pref: pref[1], preferences))
+    random_pick = random.randint(0, total_weights)
+    for preference in preferences:
+        random_pick -= preference[1]
+        if random_pick <= 0:
+            return preference[0]
+
+
+class ArtificialEngine:
 
     @staticmethod
     def generate_artificial_engine():
@@ -68,7 +77,8 @@ class ArtificialEngine:
                  random.randint(original_engine.standard_size[1] - 40, original_engine.standard_size[1] + 40)),
                 MIN_CELL_SIZE,
                 MAX_CELL_SIZE)
-            size_difference = abs(standard_size[0] - original_engine.standard_size[0]) + abs(standard_size[1] - original_engine.standard_size[1])
+            size_difference = abs(standard_size[0] - original_engine.standard_size[0]) + abs(
+                standard_size[1] - original_engine.standard_size[1])
             if 40 / difficulty_level < size_difference < 80 / difficulty_level:
                 break
 
@@ -96,10 +106,10 @@ class ArtificialEngine:
         velocity = int(original_engine.velocity * deviation)
 
         # Generate direction preferences slightly differents from the original ones
-        movement_direction_preferences = ArtificialEngine.mutate_preferences(original_engine.direction_preferences)
+        movement_direction_preferences = mutate_preferences(original_engine.direction_preferences)
 
         # Mutate action preferences until the deviation from the original ones is enough
-        action_decision_preferences = ArtificialEngine.mutate_preferences(original_engine.action_preferences)
+        action_decision_preferences = mutate_preferences(original_engine.action_preferences)
         print("Defectuous decision preferences: ", action_decision_preferences)
 
         return black_points_proportion, standard_size, theme_color, velocity, movement_direction_preferences, action_decision_preferences
@@ -114,7 +124,8 @@ class ArtificialEngine:
         image_with_pattern = image.copy()
         for x in range(0, image_with_pattern.get_width()):
             for y in range(0, image_with_pattern.get_height()):
-                if image_with_pattern.get_at((x, y)) == (255, 255, 255) and random.random() < self.black_points_proportion:
+                if image_with_pattern.get_at((x, y)) == (
+                        255, 255, 255) and random.random() < self.black_points_proportion:
                     image_with_pattern.set_at((x, y), (0, 0, 0))
 
         return image_with_pattern
@@ -137,12 +148,7 @@ class ArtificialEngine:
         return generated_color
 
     def compute_movement_direction(self):
-        total_direction_weights = sum(map(lambda direction_pref: direction_pref[1], self.direction_preferences))
-        random_pick = random.randint(0, total_direction_weights)
-        for direction_preference in self.direction_preferences:
-            random_pick -= direction_preference[1]
-            if random_pick <= 0:
-                return direction_preference[0]
+        return pick_random_preference(self.direction_preferences)
 
     def compute_teleport_endpoint(self, entity_rect):
         endpoint = generate_random_position((MAIN_WINDOW_WIDTH - entity_rect.width,
@@ -150,9 +156,4 @@ class ArtificialEngine:
         return endpoint
 
     def compute_action_decision(self):
-        total_action_weights = sum(map(lambda act_pref: act_pref[1], self.action_preferences))
-        random_pick = random.randint(0, total_action_weights)
-        for action_preference in self.action_preferences:
-            random_pick -= action_preference[1]
-            if random_pick <= 0:
-                return action_preference[0]
+        return pick_random_preference(self.action_preferences)

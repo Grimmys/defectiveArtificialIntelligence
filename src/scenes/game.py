@@ -50,7 +50,7 @@ class Game(Scene):
         self.header_level = fonts.fonts["HEADER_FONT"].render(f"LVL.{self.level}", False, (255, 255, 255))
 
     def update_tries_display(self):
-        self.header_tries = fonts.fonts["HEADER_FONT"].render(f"Tries: {self.tries}", False, (255, 255, 255))
+        self.header_tries = fonts.fonts["HEADER_FONT"].render(f"Remaining tries: {MAX_TRIES - self.tries}", False, (255, 255, 255))
 
     def init_header(self):
         self.header_title = fonts.fonts["HEADER_FONT"].render("Which one is the intruder...", False, (255, 255, 255))
@@ -98,19 +98,19 @@ class Game(Scene):
 
         # -> Timer
         header_timer = fonts.fonts["HEADER_FONT"].render(f"Timer: {self.current_elapsed_time} seconds", False, (255, 255, 255))
-        self.header.blit(header_timer, (20, self.header.get_height() // 2 - header_timer.get_height() // 2))
+        self.header.blit(header_timer, (10, self.header.get_height() // 2 - header_timer.get_height() // 2))
 
         # -> Last game message if any
         self.header.blit(self.header_title, (self.header.get_width() // 2 - self.header_title.get_width() // 2,
                                              self.header.get_height() // 2 - self.header_title.get_height() // 2))
 
         # -> Level
-        self.header.blit(self.header_level, (4 * self.header.get_width() // 5 - self.header_level.get_width() // 2,
-                                             self.header.get_height() // 2 - self.header_title.get_height() // 2))
+        self.header.blit(self.header_level, (self.header.get_width() - self.header_level.get_width() - 10,
+                                             self.header.get_height() // 4 - self.header_level.get_height() // 2))
 
         # -> Tries
-        self.header.blit(self.header_tries, (self.header.get_width() - self.header_tries.get_width() - 20,
-                                             self.header.get_height() // 2 - self.header_title.get_height() // 2))
+        self.header.blit(self.header_tries, (self.header.get_width() - self.header_tries.get_width() - 10,
+                                             3 * self.header.get_height() // 4 - self.header_tries.get_height() // 2))
         # Blit the updated header on the scene
         self.surface.blit(self.header, (0, 0))
 
