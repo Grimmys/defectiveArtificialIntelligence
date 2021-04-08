@@ -10,7 +10,6 @@ from src.game_objects.artificial_cell import ArtificialCell
 from src.gui import fonts
 from src.scenes.scene import Scene
 
-
 COLORS = (pygame.Color('red'), pygame.Color('blue'), pygame.Color('green'))
 
 
@@ -36,6 +35,12 @@ class Game(Scene):
         self.artificial_cells = pygame.sprite.Group()
         self.entities = pygame.sprite.Group()
 
+        pygame.mixer.music.load("sounds/soundtrack.ogg")
+        pygame.mixer.music.set_volume(0.7)
+        pygame.mixer.music.play(loops=-1)
+
+        self.hit_effect = pygame.mixer.Sound("sounds/hit_effect.ogg")
+        self.miss_effect = pygame.mixer.Sound("sounds/miss_effect.ogg")
         self.init_game()
 
     def build_background(self):
@@ -50,7 +55,8 @@ class Game(Scene):
         self.header_level = fonts.fonts["HEADER_FONT"].render(f"LVL.{self.level}", False, (255, 255, 255))
 
     def update_tries_display(self):
-        self.header_tries = fonts.fonts["HEADER_FONT"].render(f"Remaining tries: {MAX_TRIES - self.tries}", False, (255, 255, 255))
+        self.header_tries = fonts.fonts["HEADER_FONT"].render(f"Remaining tries: {MAX_TRIES - self.tries}", False,
+                                                              (255, 255, 255))
 
     def init_header(self):
         self.header_title = fonts.fonts["HEADER_FONT"].render("Which one is the intruder...", False, (255, 255, 255))
@@ -99,7 +105,8 @@ class Game(Scene):
         self.header.fill(pygame.Color("black"))
 
         # -> Timer
-        header_timer = fonts.fonts["HEADER_FONT"].render(f"Timer: {self.current_elapsed_time} seconds", False, (255, 255, 255))
+        header_timer = fonts.fonts["HEADER_FONT"].render(f"Timer: {self.current_elapsed_time} seconds", False,
+                                                         (255, 255, 255))
         self.header.blit(header_timer, (10, self.header.get_height() // 2 - header_timer.get_height() // 2))
 
         # -> Last game message if any
@@ -156,12 +163,18 @@ class Game(Scene):
                     if cell.is_intruder:
                         self.level += 1
                         self.victory = True
-                        self.header_title = fonts.fonts["HEADER_FONT"].render("You found it !", False, pygame.Color("green"))
+                        self.hit_effect.play()
+                        self.header_title = fonts.fonts["HEADER_FONT"].render("You found it !", False,
+                                                                              pygame.Color("green"))
                     elif self.tries == MAX_TRIES:
                         self.level = 1
                         self.defeat = True
-                        self.header_title = fonts.fonts["HEADER_FONT"].render("No, you lost. Back to first level.", False, pygame.Color("red"))
+                        self.miss_effect.play()
+                        self.header_title = fonts.fonts["HEADER_FONT"].render("No, you lost. Back to first level.",
+                                                                              False, pygame.Color("red"))
                     else:
+                        self.miss_effect.play()
                         self.header_title = fonts.fonts["HEADER_FONT"].render("No... It's not the intruder. Try again.",
                                                                               False, pygame.Color("orange"))
                     break
+

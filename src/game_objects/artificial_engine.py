@@ -54,13 +54,11 @@ class ArtificialEngine:
         movement_direction_preferences = []
         for direction in Entity.directions:
             movement_direction_preferences.append((direction, random.randint(10, 100)))
-        print("Movement direction preferences :", movement_direction_preferences)
 
         # Generate action preferences
         action_decision_preferences = [(Action.action_types.NOTHING, random.randint(50, 5000)),
                                        (Action.action_types.MOVE, random.randint(50, 5000)),
                                        (Action.action_types.TELEPORT, random.randint(20, 2000))]
-        print("Action decision preferences: ", action_decision_preferences)
         return black_points_proportion, standard_size, theme_color, velocity, movement_direction_preferences, action_decision_preferences
 
     @staticmethod
@@ -110,7 +108,6 @@ class ArtificialEngine:
 
         # Mutate action preferences until the deviation from the original ones is enough
         action_decision_preferences = mutate_preferences(original_engine.action_preferences)
-        print("Defectuous decision preferences: ", action_decision_preferences)
 
         return black_points_proportion, standard_size, theme_color, velocity, movement_direction_preferences, action_decision_preferences
 
