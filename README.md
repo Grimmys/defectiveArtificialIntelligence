@@ -4,7 +4,7 @@ A very small game made for the Pygame Community Easter Jam, respecting the main 
 
 # Goal of the game
 
-You have been selected to help finding an intruder among a cluster of cells.
+You have been selected to help find an intruder among a group of cells.
 
 Each level is procedurally generated, and all cells but one are following the same model.
 Of course, you should find the one that is different.
