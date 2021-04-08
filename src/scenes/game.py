@@ -4,7 +4,7 @@ import pygame
 from pygame import time
 
 from src.configuration import MIN_CELLS, MAX_CELLS, GAME_SURFACE_WIDTH, \
-    GAME_SURFACE_HEIGHT, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_WIDTH, TWEAKING_MODE
+    GAME_SURFACE_HEIGHT, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_WIDTH, TWEAKING_MODE, MAX_TRIES, FPS
 from src.game_objects.artificial_engine import ArtificialEngine
 from src.game_objects.artificial_cell import ArtificialCell
 from src.gui import fonts
@@ -20,6 +20,7 @@ class Game(Scene):
         super().__init__(width, height, game_controller)
         self.level = 1
         self.victory = False
+        self.defeat = False
         self.tries = 0
         self.timer = 0
         self.current_elapsed_time = 0
@@ -58,6 +59,7 @@ class Game(Scene):
 
     def init_game(self):
         self.victory = False
+        self.defeat = False
         self.tries = 0
         self.timer = time.get_ticks()
         self.current_elapsed_time = 0
@@ -123,7 +125,7 @@ class Game(Scene):
         if self.counter_before_text_disapear > -1:
             self.counter_before_text_disapear -= 1
             if self.counter_before_text_disapear == 0:
-                if self.victory:
+                if self.victory or self.defeat:
                     self.init_game()
                 else:
                     self.init_header()
@@ -140,19 +142,23 @@ class Game(Scene):
 
     def mouse_button_down(self, button, pos):
         super().mouse_button_down(button, pos)
-        if button == 1 and not self.victory:
+        if button == 1 and not (self.victory or self.defeat):
             # Position should be relative to game space, so we decrement the position by the height of the header
             pos = (pos[0], pos[1] - self.header.get_height())
             for cell in self.artificial_cells:
                 if cell.rect.collidepoint(pos):
                     self.tries += 1
                     self.update_tries_display()
-                    self.counter_before_text_disapear = 120
+                    self.counter_before_text_disapear = FPS * 2
                     if cell.is_intruder:
                         self.level += 1
                         self.victory = True
                         self.header_title = fonts.fonts["HEADER_FONT"].render("You found it !", False, pygame.Color("green"))
+                    elif self.tries == MAX_TRIES:
+                        self.level = 1
+                        self.defeat = True
+                        self.header_title = fonts.fonts["HEADER_FONT"].render("No, you lost. Back to first level.", False, pygame.Color("red"))
                     else:
                         self.header_title = fonts.fonts["HEADER_FONT"].render("No... It's not the intruder. Try again.",
-                                                                              False, pygame.Color("red"))
+                                                                              False, pygame.Color("orange"))
                     break

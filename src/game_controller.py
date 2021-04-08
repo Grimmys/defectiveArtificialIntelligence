@@ -1,6 +1,6 @@
 import pygame
 
-from src.configuration import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, GAME_NAME
+from src.configuration import MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, GAME_NAME, FPS
 from src.gui import fonts
 from src.gui.tools import show_fps
 from src.scenes.main_menu import MainMenu
@@ -40,7 +40,7 @@ class GameController:
             self.window.blit(self.active_scene.surface, (0, 0))
             show_fps(self.window, self.clock, fonts.fonts["FPS_FONT"])
             pygame.display.update()
-            self.clock.tick(120)
+            self.clock.tick(FPS)
         raise SystemExit
 
     def switch_scene(self, scene):

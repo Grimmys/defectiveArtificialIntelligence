@@ -89,11 +89,12 @@ class ArtificialCell(Entity):
                 self.image = pygame.Surface((0, 0))
             elif self.current_action.current_frame == self.current_action.nb_frames // 2:
                 self.teleport_cross_position = self.current_action.endpoint.rect
-            elif self.current_action.current_frame == self.current_action.nb_frames - 1:
+            elif self.current_action.current_frame == 3 * self.current_action.nb_frames // 4:
                 self.image = self.original_image
+                self.rect.x, self.rect.y = self.current_action.endpoint.rect.x, self.current_action.endpoint.rect.y
+            elif self.current_action.current_frame == self.current_action.nb_frames - 1:
                 self.teleport_cross_position = None
                 other_entities.remove(self.current_action.endpoint)
-                self.rect.x, self.rect.y = self.current_action.endpoint.rect.x, self.current_action.endpoint.rect.y
         elif self.current_action.nature is Action.action_types.NOTHING:
             if self.current_action.progress():
                 self.current_action = None
