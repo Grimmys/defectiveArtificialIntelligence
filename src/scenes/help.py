@@ -45,7 +45,7 @@ class Help(Scene):
         )
 
         self.text_lines.add(
-            Text((self.surface.get_width(), 50), (0, 550), "evaluate your skill at spotting intruders in simulated situations.")
+            Text((self.surface.get_width(), 50), (0, 550), "evaluate your skills at spotting intruders in simulated situations.")
         )
 
         self.text_lines.add(
