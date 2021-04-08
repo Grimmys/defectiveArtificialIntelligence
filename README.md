@@ -38,7 +38,7 @@ In this game instance of the first level, you can see that one cell is paler and
  
  * the reactivity (i.e. if the movement or the teleporation is rather slow or rather fast)
  * the movement direction preferences
- * the action preferences (in some generation, cells are really lazy and do almost nothing, in others you may see them using teleporation everytime)
+ * the action preferences (in some generations the cells are really lazy and do next to nothing, in others you may see them using teleporation every time)
 
 # Any question?
 
