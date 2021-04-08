@@ -139,7 +139,7 @@ class Game(Scene):
 
     def key_down(self, key):
         super().key_down(key)
-        if key == pygame.K_r:
+        if TWEAKING_MODE and key == pygame.K_r:
             self.init_game()
 
     def mouse_button_down(self, button, pos):
