@@ -11,7 +11,7 @@ Of course, you should find the one that is different.
 
 ![An example of a game instance](https://github.com/Grimmys/defectiveArtificialIntelligence/blob/main/screenshots/game_in_progress.png)
 
-In this game instance for the first level, you can see that one cell is paler and more flattened than others: click on it, and go to next level!
+In this game instance of the first level, you can see that one cell is paler and more flattened than others: click on it, and let's go to next level!
 
 # Controls
 * R : Reset level generation (only available on tweaking mode, it's like cheating)
