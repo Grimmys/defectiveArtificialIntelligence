@@ -12,7 +12,9 @@ Of course, you should find the one that is different.
 ![An example of a game instance](https://github.com/Grimmys/defectiveArtificialIntelligence/blob/main/screenshots/game_in_progress.png)
 
 In this game instance of the first level, you can see that one cell is paler and more flattened than others: click on it, and let's go to next level!
+
 Be cautious before making a guess : you have a limited number of attempts before being forced to restart from level 1!
+
 My current record is 15 levels, do you think you can do better? 
 
 # Controls
