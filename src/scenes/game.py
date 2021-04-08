@@ -66,12 +66,13 @@ class Game(Scene):
         self.counter_before_text_disapear = -1
 
         self.init_header()
-        self.init_robots()
+        self.init_cells()
 
-    def init_robots(self):
+    def init_cells(self):
         self.artificial_cells.empty()
         self.entities.empty()
         number_cells = random.randint(MIN_CELLS, MAX_CELLS)
+        # All cells but one will have the same artificial engine
         common_artificial_engine = ArtificialEngine(self.level)
         for i in range(number_cells):
             while True:
@@ -81,6 +82,7 @@ class Game(Scene):
 
             self.artificial_cells.add(robot)
             self.entities.add(robot)
+
         # Generated the intruder trying to copy others
         while True:
             intruder = ArtificialCell(ArtificialEngine(self.level, common_artificial_engine), is_the_intruder=True)

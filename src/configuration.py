@@ -16,6 +16,8 @@ MAX_CELLS = 20
 MIN_CELL_SIZE = 50
 MAX_CELL_SIZE = 160
 
+SHOW_FPS = False
+# If the tweaking mode is active, intruder will be directly visible
 TWEAKING_MODE = False
 
 MOVEMENT_STEPS = 50
